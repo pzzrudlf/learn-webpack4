@@ -1,8 +1,15 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require('path');
+const webpack = require('webpack');
 
 
 module.exports = {
+	entry: './src/index.js',
+	output: {
+		filename: '[name].bundle.js',
+		path: path.resolve(__dirname, 'dist'),
+	},
 	module: {
 		rules: [
 			{
@@ -29,12 +36,12 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebPackPlugin({
-			template: "./src/index.html",
-			filename: "./index.html"
+			title: 'webpack-cli',
+			template: './public/index.html'
 		}),
 		new MiniCssExtractPlugin({
-			filename: "[name].css",
-			chunkFilename: "[id].css"
+			filename: "[name].[contenthash].css",
+			chunkFilename: "[id].[contenthash].css"
 		})
 	]
 };
