@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 class App extends Component {
   render() {
-    return ('hello');
+    return (
+      <div>hello, webpack4. react</div>
+    );
   }
 }
 
