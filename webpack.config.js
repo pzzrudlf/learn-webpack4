@@ -1,7 +1,7 @@
+// const webpack = require('webpack');
+const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const path = require('path');
-const webpack = require('webpack');
 
 
 module.exports = {
@@ -29,19 +29,57 @@ module.exports = {
 				]
 			},
 			{
+				test: /\.scss$/,
+				use: [
+					MiniCssExtractPlugin.loader,
+					'css-loader',
+					{
+						loader: 'sass-loader',
+						options: {
+							sourceMap: true,
+							javascriptEnabled: true,
+							modifyVars: {
+								'primary-color': '#531dab'
+							}
+						}
+					}
+				]
+			},
+			{
 				test: /\.css$/,
-				use: [MiniCssExtractPlugin.loader, "css-loader"]
+				use: [
+					MiniCssExtractPlugin.loader, 
+					'css-loader',
+					'postcss-loader'
+				]
 			}
 		]
 	},
 	plugins: [
 		new HtmlWebPackPlugin({
-			title: 'webpack-cli',
-			template: './public/index.html'
+			template: './public/index.html',
 		}),
 		new MiniCssExtractPlugin({
 			filename: "[name].[contenthash].css",
 			chunkFilename: "[id].[contenthash].css"
 		})
-	]
+	],
+	optimization: {
+		splitChunks: {
+			cacheGroups: {
+				commons: {
+					name: 'commons',
+					priority: 10,
+					chunks: 'initial'
+				},
+				styles: {
+					name: 'styles',
+					test: /\.(css|scss)$/,
+					chunks: 'all',
+					minChunks: 2,
+					enforce: true
+				}
+			}
+		}
+	}
 };
